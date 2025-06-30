@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Real-Time Editor</title>
+  <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+  <h2>Real-Time Collaborative Editor</h2>
+  <textarea id="editor" rows="20" cols="80"></textarea>
+
+  <script>
+    const socket = io();
+
+    const room = "room1";
+    const user = "User" + Math.floor(Math.random() * 1000);
+    const editor = document.getElementById('editor');
+
+    socket.emit('join_room', { room, user });
+
+    editor.addEventListener('input', () => {
+      socket.emit('text_change', { room, text: editor.value });
+    });
+
+    socket.on('text_update', (data) => {
+      editor.value = data.text;
+    });
+
+    socket.on('user_joined', (data) => {
+      console.log(`${data.user} joined the room`);
+    });
+  </script>
+</body>
+</html>
