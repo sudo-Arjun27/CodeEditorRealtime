@@ -1,6 +1,5 @@
 # ✅ Always do this FIRST
 import eventlet
-#################################3
 eventlet.monkey_patch()
 
 # Now import everything else
